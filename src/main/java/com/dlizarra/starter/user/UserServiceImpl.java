@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void updateUser(final UserDto user) {
 		// TODO Auto-generated method stub
-
+		throw new UnsupportedOperationException("Not yet implemented");
 	}
 
 	@Transactional

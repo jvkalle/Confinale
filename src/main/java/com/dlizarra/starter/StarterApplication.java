@@ -3,6 +3,7 @@ package com.dlizarra.starter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.core.env.ConfigurableEnvironment;
 
+
 public class StarterApplication extends SpringApplication {
 
 	public StarterApplication(final Class<?> clazz) {

@@ -44,6 +44,7 @@ public class User {
 	private String username;
 
 	@Column(nullable = false)
+    //Attention: You may not want to do this in production applications
 	private String password;
 
 	private boolean enabled;
