@@ -83,25 +83,22 @@ export class ScratchComponent implements OnInit {
   ngOnInit() {
     this.productRows = [];
     this.onRefreshClicked();
-
-
-
-    this.httpClient.get<productRow[]>("api/purchases")
-    //NOTE: ideally, we should have an error handler here, which we left away for simplicity
-      .subscribe(resp => {
-          this.productRows = resp;
-      });
   }
 
 
   onRefreshClicked() {
+    this.httpClient.get<productRow[]>("api/purchases")
+    //NOTE: ideally, we should have an error handler here, which we left away for simplicity
+      .subscribe(resp => {
+        this.productRows = resp;
+      });
     this.httpClient.get<User[]>("api/users")
     //NOTE: ideally, we should have an error handler here, which we left away for simplicity
       .subscribe(resp => {
         this.users = resp;
       });
-
     this.loadedAt = new Date().toLocaleTimeString();
+
   }
 
   removeUsers() {
