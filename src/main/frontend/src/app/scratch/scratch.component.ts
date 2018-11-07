@@ -32,6 +32,10 @@ export class ScratchComponent implements OnInit {
       return this.users.filter(u=> u.id === id)[0];
   }
 
+  calcTotalForUser(id: number): number {
+    return this.productRows.filter(row => row.userId === id).map(row => row.price).reduce((a, o)=>a+o, 0);
+  }
+
   calcTotal():number{
     let total:number = 0;
     for(let pr of this.productRows){
@@ -45,7 +49,8 @@ export class ScratchComponent implements OnInit {
     this.productRows.splice(this.productRows.indexOf(pr), 1);
     console.log(`api/purchases/${pr.id}`);
     this.httpClient.delete(`api/purchases/${pr.id}`).subscribe(resp => this.productRows = <productRow[]> resp);
-
+    this.currentRow = {...this.emptyRow};
+    this.currentIndex = -1;
   }
   onEditRow(pr : productRow){
     this.currentRow = {... pr};
@@ -77,7 +82,7 @@ export class ScratchComponent implements OnInit {
 
   ngOnInit() {
     this.productRows = [];
-    this.onLoadUsersButtonClick();
+    this.onRefreshClicked();
 
 
 
@@ -89,7 +94,7 @@ export class ScratchComponent implements OnInit {
   }
 
 
-  onLoadUsersButtonClick() {
+  onRefreshClicked() {
     this.httpClient.get<User[]>("api/users")
     //NOTE: ideally, we should have an error handler here, which we left away for simplicity
       .subscribe(resp => {
@@ -101,5 +106,9 @@ export class ScratchComponent implements OnInit {
 
   removeUsers() {
     this.users = null;
+  }
+
+  onEqualize() {
+
   }
 }

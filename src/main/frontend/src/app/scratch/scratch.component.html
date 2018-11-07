@@ -1,16 +1,7 @@
 <p>
-  Hello World!
-</p>
-<p>
-  We prepared a sample http request for you:
-  <button (click)="onLoadUsersButtonClick()"> Click me to load users</button>
-</p>
-
-<p *ngIf="users">
-  We loaded the following users from the database at {{loadedAt}}:
-  <span *ngFor="let user of users;">
-    {{user.username + " "}}
-  </span>
+  Rrefresh Data
+  <button (click)="onRefreshClicked()">Click me to refresh the data</button><br/>
+  <small *ngIf="users">We loaded the following users from the database at {{loadedAt}}</small>
 </p>
 
 <h2>Einkaufsprotokoll</h2>
@@ -47,23 +38,32 @@
 </table>
 
 <h3>Ändern/Hinzufügen</h3>
-<form ngController="ScratchComponent">
-  <label>Produkt:<input type="text" [(ngModel)]="currentRow.product" name="product"/></label> <br/>
-  <label>User: <input type="number" [(ngModel)]="currentRow.userId" name="userId" /></label>   <br/>
-  <label>Datum: <input type="date" [(ngModel)]="currentRow.date" name="date" /></label>  <br/>
-  <label>Preis: <input type="number" [(ngModel)]="currentRow.price" name="price"/></label>   <br/>
+<form *ngIf="users" ngController="ScratchComponent">
+  <label>Produkt:<input type="text" [(ngModel)]="currentRow.product" name="product" [required]/></label> <br/>
+  <label>User:
+    <select [(ngModel)]="currentRow.userId" name="userId" [required]>
+      <option *ngFor="let user of users" [ngValue]="user.id">{{user.username}}</option>
+    </select>
+  </label><br/>
+  <label>Datum: <input type="date" [(ngModel)]="currentRow.date" name="date" [required]/></label>  <br/>
+  <label>Preis: <input type="number" [(ngModel)]="currentRow.price" name="price" [required] [min]="0.05"/></label>   <br/>
   <input type="button" (click)="submitRow()"  value="speichern"/>
 </form>
 
-
+<p></p>
+<hr />
+<p></p>
 
 <table>
+  <tr>
+    <th>User</th>
+    <th>Ausgaben</th>
+  </tr>
   <tr *ngFor="let user of users">
-    <td>{{user.id}}</td>
     <td>{{user.username}}</td>
+    <td *ngIf="productRows">{{calcTotalForUser(user.id)}} CHF</td>
+  </tr>
+  <tr>
+    <td colspan="2"><button (click)="onEqualize()">clear debpts</button> </td>
   </tr>
 </table>
-
-<p *ngIf="users">
-  <button (click)="removeUsers()"> Clear Loaded Users </button>
-</p>
