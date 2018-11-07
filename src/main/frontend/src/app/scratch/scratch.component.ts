@@ -68,6 +68,7 @@ export class ScratchComponent implements OnInit {
   }
 
 
+
   submitRow() {
     if (this.currentIndex === -1) {
       this.productRows.push(this.currentRow);

@@ -3,11 +3,14 @@
 </p>
 <p>
   We prepared a sample http request for you:
-  <button (click)="onLoadUsersButtonClick()"> Klick me to load users</button>
+  <button (click)="onLoadUsersButtonClick()"> Click me to load users</button>
 </p>
 
 <p *ngIf="users">
     We loaded the following users from the database at {{loadedAt}}:
+  <span *ngFor="let user of users;">
+    {{user.username + " "}}
+  </span>
 </p>
 
 <h2>Einkaufsprotokoll</h2>

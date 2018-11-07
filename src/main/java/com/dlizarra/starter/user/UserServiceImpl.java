@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import ma.glasnost.orika.MapperFactory;
+import ma.glasnost.orika.metadata.ClassMapBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private OrikaBeanMapper mapper;
+
 
 	@Transactional
 	@Override

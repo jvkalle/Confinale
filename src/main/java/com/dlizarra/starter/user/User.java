@@ -53,9 +53,10 @@ public class User {
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<Role> roles = new HashSet<Role>();
+	public User(){
 
-	public User() {
 	}
+
 
 	/**
 	 * Constructor used exclusively by {@link CustomUserDetails}}

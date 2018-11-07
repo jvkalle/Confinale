@@ -21,7 +21,6 @@ import lombok.ToString;
 @Getter
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class UserDto {
-
 	private Integer id;
 
 	@Size(max = User.MAX_LENGTH_USERNAME)
@@ -33,5 +32,12 @@ public class UserDto {
 	private LocalDateTime modificationTime;
 	@JsonIgnore
 	private Set<Role> roles;
+
+	public UserDto(int id,String username,String password,boolean enabled) {
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.enabled = enabled;
+	}
 
 }
