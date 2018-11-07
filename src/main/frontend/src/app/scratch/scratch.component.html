@@ -7,7 +7,7 @@
 </p>
 
 <p *ngIf="users">
-    We loaded the following users from the database at {{loadedAt}}:
+  We loaded the following users from the database at {{loadedAt}}:
   <span *ngFor="let user of users;">
     {{user.username + " "}}
   </span>
@@ -22,14 +22,17 @@
     <th>Preis</th>
   </tr>
 
- <tr *ngFor="let pr of productRows;">
-   <td>{{pr.product}}</td>
-   <td>{{pr.userId}}</td>
-   <td>{{pr.date}}</td>
-   <td>{{pr.price}} CHF</td>
-   <td><button (click)="onDeleteRow(pr)">X</button></td>
-   <td><button (click)="onEditRow(pr)">Edit</button></td>
- </tr>
+  <ng-container *ngIf="users && productRows">
+    <tr *ngFor="let pr of productRows;">
+      <td>{{pr.product}}</td>
+      <td>{{getUserById(pr.userId).username}}</td>
+      <td>{{pr.date}}</td>
+      <td>{{pr.price}} CHF</td>
+      <td><button (click)="onDeleteRow(pr)">X</button></td>
+      <td><button (click)="onEditRow(pr)">Edit</button></td>
+    </tr>
+  </ng-container>
+
   <hr />
   <tr>
     <td>Total:</td>
@@ -40,15 +43,16 @@
     <td></td>
   </tr>
 
+
 </table>
 
 <h3>Ändern/Hinzufügen</h3>
 <form ngController="ScratchComponent">
   <label>Produkt:<input type="text" [(ngModel)]="currentRow.product" name="product"/></label> <br/>
-  <label>User: <input type="text" [(ngModel)]="currentRow.userId" name="userId" /></label>   <br/>
+  <label>User: <input type="number" [(ngModel)]="currentRow.userId" name="userId" /></label>   <br/>
   <label>Datum: <input type="date" [(ngModel)]="currentRow.date" name="date" /></label>  <br/>
   <label>Preis: <input type="number" [(ngModel)]="currentRow.price" name="price"/></label>   <br/>
-<input type="button" (click)="submitRow()"  value="speichern"/>
+  <input type="button" (click)="submitRow()"  value="speichern"/>
 </form>
 
 

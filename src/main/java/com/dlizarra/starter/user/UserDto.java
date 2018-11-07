@@ -30,6 +30,7 @@ public class UserDto {
 	private boolean enabled;
 	private LocalDateTime creationTime;
 	private LocalDateTime modificationTime;
+
 	@JsonIgnore
 	private Set<Role> roles;
 

@@ -2,9 +2,8 @@
 import {Component, NgModule, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {User} from "./user";
-import {productRow} from "./productRow";
+import {productRow, productRowLongDate } from "./productRow";
 import {forEach} from "@angular/router/src/utils/collection";
-
 
 
 @Component({
@@ -15,42 +14,24 @@ import {forEach} from "@angular/router/src/utils/collection";
 
 export class ScratchComponent implements OnInit {
   // private productRow: ({ id: number; product: string; price: number; date: string; userId: number })[];
-  private productRow : {
-    id: number;
-    product: string;
-    price: number,
-    date: Date,
-    userId: number,
-    index: number;
-  };
-
 
   private productRows: productRow[];
   private currentRow: productRow;
   private currentIndex: number = -1;
-  private emptyRow:productRow=  {
-    id:undefined,product:undefined,price:undefined,date:undefined,userId:undefined
-  };
+  private emptyRow:productRow={id:undefined,product:undefined,price:undefined,date:undefined,userId:undefined};
   users: User[];
 
   loadedAt: string;
 
   constructor( private httpClient:HttpClient) {
-    console.log("testLog");
     this.currentRow =  {... this.emptyRow};
 
-    this.productRows = [
-      {
-        id:1,product:"Seife",price:5,date:"6.11.2018",userId:1
-      },
-      {
-        id:2,product:"Kaffee",price:8,date:"4.11.2018",userId:2
-  },
-      {
-        id:2,product:"Tee",price:4,date:"3.11.2018",userId:2
-      }
-    ];
   }
+
+  getUserById(id:number):User{
+      return this.users.filter(u=> u.id === id)[0];
+  }
+
   calcTotal():number{
     let total:number = 0;
     for(let pr of this.productRows){
@@ -60,7 +41,11 @@ export class ScratchComponent implements OnInit {
   }
 
   onDeleteRow(pr : productRow) {
+    //only for that it disappears instantly
     this.productRows.splice(this.productRows.indexOf(pr), 1);
+    console.log(`api/purchases/${pr.id}`);
+    this.httpClient.delete(`api/purchases/${pr.id}`).subscribe(resp => this.productRows = <productRow[]> resp);
+
   }
   onEditRow(pr : productRow){
     this.currentRow = {... pr};
@@ -70,23 +55,37 @@ export class ScratchComponent implements OnInit {
 
 
   submitRow() {
-    if (this.currentIndex === -1) {
-      this.productRows.push(this.currentRow);
+    //console.log("NEW DATE", this.currentRow.date);
+    if (this.currentIndex  === -1) {
+      //this.productRows.push(this.currentRow);
+
+      this.httpClient.post("api/purchases", this.currentRow)
+        .subscribe(resp => this.productRows = <productRow[]> resp);
+
     }
     else {
       // replace
-      this.productRows.splice(this.currentIndex,1,this.currentRow);
-      this.currentRow = {... this.emptyRow};
-      this.currentIndex = -1;
-
-      //this.onDeleteRow(this.currentRow);
+      this.productRows.splice(this.currentIndex , 1, this.currentRow);
+      this.httpClient.put(`api/purchases/${this.currentRow.id}`, this.currentRow)
+        .subscribe(resp => this.productRows = <productRow[]> resp);
     }
-
+    this.currentRow = {...this.emptyRow};
+    this.currentIndex = -1;
   }
 
 
 
   ngOnInit() {
+    this.productRows = [];
+    this.onLoadUsersButtonClick();
+
+
+
+    this.httpClient.get<productRow[]>("api/purchases")
+    //NOTE: ideally, we should have an error handler here, which we left away for simplicity
+      .subscribe(resp => {
+          this.productRows = resp;
+      });
   }
 
 
