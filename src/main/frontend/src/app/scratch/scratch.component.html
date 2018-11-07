@@ -1,0 +1,52 @@
+<p>
+  Hello World!
+</p>
+<p>
+  We prepared a sample http request for you:
+  <button (click)="onLoadUsersButtonClick()"> Klick me to load users</button>
+</p>
+
+<p *ngIf="users">
+    We loaded the following users from the database at {{loadedAt}}:
+</p>
+
+<h2>Einkaufsprotokoll</h2>
+<table>
+  <tr>
+    <th>Produkt</th>
+    <th>User</th>
+    <th>Datum</th>
+    <th>Preis</th>
+  </tr>
+
+ <tr *ngFor="let pr of productRows;">
+   <td>{{pr.product}}</td>
+   <td>{{pr.userId}}</td>
+   <td>{{pr.date}}</td>
+   <td>{{pr.price}} CHF</td>
+   <td><button (click)="onDeleteRow(pr)">X</button></td>
+   <td><button (click)="onEditRow()">Edit</button></td>
+ </tr>
+</table>
+
+<h3>Ändern/Hinzufügen</h3>
+<form ngController="ScratchComponent">
+  <label>Produkt:<input type="text" [(ngModel)]="currentRow.product" name="product"/></label> <br/>
+  <label>User: <input type="text" [(ngModel)]="currentRow.userId" name="userId" /></label>   <br/>
+  <label>Datum: <input type="date" [(ngModel)]="currentRow.date" name="date" /></label>  <br/>
+  <label>Preis: <input type="number" [(ngModel)]="currentRow.price" name="price"/></label>   <br/>
+<input type="button" (click)="submitRow()"  value="speichern"/>
+</form>
+
+
+
+<table>
+  <tr *ngFor="let user of users">
+    <td>{{user.id}}</td>
+    <td>{{user.username}}</td>
+  </tr>
+</table>
+
+<p *ngIf="users">
+  <button (click)="removeUsers()"> Clear Loaded Users </button>
+</p>
